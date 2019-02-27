@@ -1,0 +1,82 @@
+.App {
+  vertical-align: middle;
+  color: white;
+
+}
+
+.timer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+}
+
+.timer {
+  font-size: 150px;
+  width: 630px;
+  display: block;
+}
+
+.negative {
+  color: rgb(226, 21, 56);
+}
+
+.time-input-container {
+  display: flex;
+  justify-content: center;
+  background: #efefef;
+  padding: 20px;
+  width: 40%;
+  margin: 200px auto;
+
+}
+
+.time-input-container span {
+  font-size: 48px;
+  color: black;
+  margin: 0 10px;
+}
+
+.time-select {
+  display: block;
+  font-size: 24px;
+  color: #444;
+  line-height: 2;
+  padding: 10px 10px;
+  box-sizing: border-box;
+  margin: 0;
+  border: 1px solid #aaa;
+  border-radius: .3em;
+  appearance: none;
+  background-color: #fff;
+}
+
+.time-select::-ms-expand {
+  display: none;
+}
+
+.time-select:hover {
+  border-color: #888;
+}
+
+.time-select:focus {
+  border-color: #aaa;
+  color: #222; 
+  outline: none;
+}
+
+.time-select optgroup option {
+  font-size: 2px;
+}
+
+.button-controlls {
+  display: flex;
+  margin: 0 auto;
+  width: 300px;
+}
+
+.button-controlls button {
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px 40px;
+}
