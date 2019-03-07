@@ -12,7 +12,7 @@ const TimerController = (props) => {
   );
   const runningButtons = (
     <React.Fragment>
-      <button>
+      <button onClick={props.onPause}>
         <FontAwesomeIcon icon={faPause} size="4x" />
       </button>
       <button onClick={props.onCancel}>
@@ -20,7 +20,7 @@ const TimerController = (props) => {
       </button>
     </React.Fragment>
   );
-  const renderingButtons = props.isRunning ? runningButtons : readyButtons;
+  const renderingButtons = props.isRunning && !props.isPause ? runningButtons : readyButtons;
 
   return (
     <div className="button-controlls">

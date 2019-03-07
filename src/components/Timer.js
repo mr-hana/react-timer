@@ -14,35 +14,65 @@ class Timer extends React.Component {
     }
   }
 
-  componentDidMount () {
-    this.setStateTime(this.props.countSeconds - 1);
-    this.setState({playAlarm: this.props.countSeconds <= 60})
+  componentDidMount() {
+    this.setStateTime(this.props.countSeconds);
+    this.setState({ playAlarm: this.props.countSeconds <= 60 })
     this.beginAt = new Date();
-    this.timerID = setInterval(
-      () => this.tick(),
-      1000
-    );
+    this.runTimer();
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     clearInterval(this.timerID);
   }
 
-  tick () {
-    const elapsedTime = (new Date() - this.beginAt) / 1000;
-    const remaining = this.props.countSeconds - elapsedTime;
+  componentDidUpdate(prevProps) {
+    if (prevProps.isPause === this.props.isPause) {
+      return;
+    }
+
+    if (this.props.isPause) {
+      this.elapsedSeconds = this.getElapsedSeconds();
+      clearInterval(this.timerID);
+    } else {
+      const currentDate = new Date();
+      currentDate.setSeconds(currentDate.getSeconds() - this.elapsedSeconds);
+      this.beginAt = currentDate;
+      this.runTimer();
+    }
+  }
+
+  runTimer() {
+    this.timerID = setInterval(
+      () => this.tick(),
+      250
+    );
+  }
+
+  tick() {
+    const remaining = this.getRemainingSeconds();
     this.setStateTime(remaining);
     if (!this.state.playFinish && remaining <= 0) {
-      this.setState({playFinish: true});
+      this.setState({ playFinish: true });
       this.playSound('finish');
     } else if (!this.state.playAlarm && remaining <= 60) {
-      this.setState({playAlarm: true});
+      this.setState({ playAlarm: true });
       this.playSound('alarm');
     }
   }
 
-  setStateTime (remainingSeconds) {
-    let time = convertTime(remainingSeconds);
+  getRemainingSeconds() {
+    const getElapsedSeconds = this.getElapsedSeconds();
+    return this.props.countSeconds - getElapsedSeconds;
+  }
+
+  getElapsedSeconds() {
+    // 900ms：経過時間の観点から補正
+    const elapsedSeconds = (new Date() - this.beginAt - 900);
+    return elapsedSeconds / 1000;
+  }
+
+  setStateTime(remainingSeconds) {
+    const time = convertTime(remainingSeconds);
     this.setState({
       isNegative: remainingSeconds < 0,
       hour: padZero(time.hour),
@@ -51,13 +81,13 @@ class Timer extends React.Component {
     })
   }
 
-  playSound (id) {
-    let finish = document.getElementById(id);
+  playSound(id) {
+    const finish = document.getElementById(id);
     finish.play();
   }
 
-  attachClass () {
-    let baseClass = ['timer'];
+  attachClass() {
+    const baseClass = ['timer'];
     if (this.state.isNegative) {
       baseClass.push('negative')
     }
@@ -65,7 +95,7 @@ class Timer extends React.Component {
     return baseClass.join(' ')
   }
 
-  render () {
+  render() {
     return (
       <div className="timer-container">
         <div className={this.attachClass()}>

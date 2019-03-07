@@ -14,11 +14,15 @@ class App extends Component {
   }
 
   handleRunning () {
-    this.setState({ isRunning: true });
+    this.setState({ isRunning: true, isPause: false });
   }
 
   handleCancel () {
     this.setState({ isRunning: false });
+  }
+
+  handlePause () {
+    this.setState({ isPause: true });
   }
 
   handleChangeTime (timeSeconds) {
@@ -28,11 +32,16 @@ class App extends Component {
   render () {
     return (
       <div className="App">
-        {this.state.isRunning ? <Timer countSeconds={this.state.time} /> : <TimeInputArea time={this.state.time} onChange={(value) => this.handleChangeTime(value)} />}
+        {this.state.isRunning
+          ? <Timer countSeconds={this.state.time} isRunning={this.state.isRunning} isPause={this.state.isPause} /> 
+          : <TimeInputArea time={this.state.time} onChange={(value) => this.handleChangeTime(value)} />}
         <TimerController
           isRunning={this.state.isRunning}
+          isPause={this.state.isPause}
           onStart={() => this.handleRunning()}
-          onCancel={() => this.handleCancel()} />
+          onCancel={() => this.handleCancel()}
+          onPause={() => this.handlePause()}
+           />
         <audio id="finish" src="finish.mp3" />
         <audio id="alarm" src="alarm.mp3" />
       </div>
